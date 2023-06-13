@@ -1350,7 +1350,7 @@ export default class AudioMotionAnalyzer {
 	 * Redraw the canvas
 	 * this is called 60 times per second by requestAnimationFrame()
 	 */
-	_draw( timestamp ) {
+	_draw( timestamp, customFftData ) {
 		const barSpace       = this._barSpace,
 			  barSpacePx     = this._barSpacePx,
 			  ctx            = this._canvasCtx,
@@ -1564,7 +1564,12 @@ export default class AudioMotionAnalyzer {
 
 			// get a new array of data from the FFT
 			let fftData = this._fftData[ channel ];
-			this._analyzer[ channel ].getFloatFrequencyData( fftData );
+
+			if (customFftData) {
+				fftData = customFftData[ channel ];
+			} else {
+				this._analyzer[ channel ].getFloatFrequencyData( fftData );
+			}
 
 			// apply weighting
 			if ( weightingFilter )
